@@ -25,7 +25,7 @@ public class WhirlPanels : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+                "Core", "CoreUObject", "UMG", "SlateCore"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -34,10 +34,6 @@ public class WhirlPanels : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
-				"Slate",
-				"SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
