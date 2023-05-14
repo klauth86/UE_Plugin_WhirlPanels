@@ -26,10 +26,14 @@ void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArr
 
 	int NumVisibleItems = 0;
 
+	TMap<TSharedPtr<SWidget>, int32> widgetSlots;
+
 	for (int32 ChildIndex = 0; ChildIndex < NumItems; ++ChildIndex)
 	{
 		const FSlot& Slot = Slots[ChildIndex];
 		const TSharedRef<SWidget>& Widget = Slot.GetWidget();
+
+		widgetSlots.Add(Widget, ChildIndex);
 
 		if (Widget->GetVisibility() != EVisibility::Collapsed)
 		{
@@ -55,11 +59,9 @@ void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArr
 
 			if (Widget->GetVisibility() != EVisibility::Collapsed)
 			{
-				const FVector2D DesiredSizeOfSlot = Widget->GetDesiredSize();
-
 				const FVector offset3D(
-					halfLocalSize.X * FMath::Cos(angleRad) * RadiusA - DesiredSizeOfSlot.X * Slot.GetPivot().X,
-					halfLocalSize.Y * FMath::Sin(angleRad) * RadiusB - DesiredSizeOfSlot.Y * Slot.GetPivot().Y, 0);
+					halfLocalSize.X * FMath::Cos(angleRad) * RadiusA,
+					halfLocalSize.Y * FMath::Sin(angleRad) * RadiusB, 0);
 
 				const FVector rotatedOffset3D = FVector(RotationMatrix.TransformPosition(offset3D)) + FVector(halfLocalSize, 0);
 
@@ -74,9 +76,11 @@ void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArr
 
 		for(const TSharedPtr<SWidget>& widget : widgets)
 		{
+			const FVector2D DesiredSizeOfSlot = widget->GetDesiredSize();
+
 			FVector2D offset;
-			offset.X = halfLocalSize.X + (widgetOffsets[widget].X - halfLocalSize.X) * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
-			offset.Y = halfLocalSize.Y + (widgetOffsets[widget].Y - halfLocalSize.Y) * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
+			offset.X = -DesiredSizeOfSlot.X * Slots[widgetSlots[widget]].GetPivot().X + halfLocalSize.X + (widgetOffsets[widget].X - halfLocalSize.X) * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
+			offset.Y = -DesiredSizeOfSlot.Y * Slots[widgetSlots[widget]].GetPivot().Y + halfLocalSize.Y + (widgetOffsets[widget].Y - halfLocalSize.Y) * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
 
 			ArrangedChildren.AddWidget(AllottedGeometry.MakeChild(widget.ToSharedRef(), offset, widget->GetDesiredSize()));
 		}
