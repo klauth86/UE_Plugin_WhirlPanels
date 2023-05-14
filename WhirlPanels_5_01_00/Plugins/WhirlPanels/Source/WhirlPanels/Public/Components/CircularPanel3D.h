@@ -56,6 +56,7 @@ public:
 		, _Angle(0)
 		, _FocusZ(-16)
 		, _ProjectionZ(1.0f)
+		, _bDrawDebugEllipse(1)
 	{
 		_Visibility = EVisibility::SelfHitTestInvisible;
 	}
@@ -76,6 +77,8 @@ public:
 		
 		SLATE_ATTRIBUTE(float, ProjectionZ)
 
+		SLATE_ATTRIBUTE(bool, bDrawDebugEllipse)
+
 	SLATE_END_ARGS()
 
 	void SetRadiusA(const TAttribute<float>& radiusA) { RadiusA = radiusA.Get(0); }
@@ -92,6 +95,8 @@ public:
 	
 	void SetProjectionZ(const TAttribute<float>& projectionZ) { ProjectionZ = projectionZ.Get(1.0f); }
 
+	void SetDrawDebugEllipse(const TAttribute<bool>& drawDebugEllipse) { bDrawDebugEllipse = drawDebugEllipse.Get(0); }
+
 	SCircularPanel3D() : Slots(this) {}
 
 	void Construct(const FArguments& InArgs);
@@ -106,6 +111,8 @@ public:
 	virtual FVector2D ComputeDesiredSize(float) const override { return FVector2D::ZeroVector; }
 	virtual FChildren* GetChildren() override { return &Slots; }
 
+	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override;
+
 	void CalculateRotationMatrix();
 
 protected:
@@ -119,6 +126,7 @@ protected:
 	float Angle; 
 	float FocusZ;
 	float ProjectionZ;
+	bool bDrawDebugEllipse;
 
 	FMatrix RotationMatrix;
 	FMatrix ProjectionMatrix;
@@ -182,6 +190,9 @@ public:
 		void SetProjectionZ(float projectionZ);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
+		void SetDrawDebugEllipse(bool drawDebugEllipse);
+
+	UFUNCTION(BlueprintCallable, Category = "Widget")
 		UCircularPanel3DSlot* AddChildToCircularPanel3D(UWidget* Content);
 
 	virtual void SynchronizeProperties() override;
@@ -230,4 +241,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
 		float ProjectionZ;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
+		uint8 bDrawDebugEllipse;
 };

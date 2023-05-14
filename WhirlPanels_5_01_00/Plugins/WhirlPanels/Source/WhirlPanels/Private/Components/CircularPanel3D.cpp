@@ -15,6 +15,7 @@ void SCircularPanel3D::Construct(const FArguments& InArgs)
 	SetAngle(InArgs._Angle);
 	SetFocusZ(InArgs._FocusZ);
 	SetProjectionZ(InArgs._ProjectionZ);
+	SetDrawDebugEllipse(InArgs._bDrawDebugEllipse);
 }
 
 void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrangedChildren& ArrangedChildren) const
@@ -57,10 +58,10 @@ void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArr
 				const FVector2D DesiredSizeOfSlot = Widget->GetDesiredSize();
 
 				const FVector offset3D(
-					halfLocalSize.X * (1 + FMath::Cos(angleRad) * RadiusA) - DesiredSizeOfSlot.X * Slot.GetPivot().X,
-					halfLocalSize.Y * (1 + FMath::Sin(angleRad) * RadiusB) - DesiredSizeOfSlot.Y * Slot.GetPivot().Y, 0);
+					halfLocalSize.X * FMath::Cos(angleRad) * RadiusA - DesiredSizeOfSlot.X * Slot.GetPivot().X,
+					halfLocalSize.Y * FMath::Sin(angleRad) * RadiusB - DesiredSizeOfSlot.Y * Slot.GetPivot().Y, 0);
 
-				const FVector rotatedOffset3D = FVector(RotationMatrix.TransformPosition(offset3D));
+				const FVector rotatedOffset3D = FVector(RotationMatrix.TransformPosition(offset3D)) + FVector(halfLocalSize, 0);
 
 				widgets.Add(Widget);
 				widgetOffsets.Add(Widget, rotatedOffset3D);
@@ -74,12 +75,60 @@ void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArr
 		for(const TSharedPtr<SWidget>& widget : widgets)
 		{
 			FVector2D offset;
-			offset.X = widgetOffsets[widget].X * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
-			offset.Y = widgetOffsets[widget].Y * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
+			offset.X = halfLocalSize.X + (widgetOffsets[widget].X - halfLocalSize.X) * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
+			offset.Y = halfLocalSize.Y + (widgetOffsets[widget].Y - halfLocalSize.Y) * (1 + (ProjectionZ - widgetOffsets[widget].Z) / (widgetOffsets[widget].Z - FocusZ));
 
 			ArrangedChildren.AddWidget(AllottedGeometry.MakeChild(widget.ToSharedRef(), offset, widget->GetDesiredSize()));
 		}
 	}
+}
+
+int32 SCircularPanel3D::OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const
+{
+	if (bDrawDebugEllipse)
+	{
+		const FVector2D halfLocalSize = 0.5 * AllottedGeometry.GetLocalSize();
+
+		const ESlateDrawEffect DrawEffects = IsEnabled() ? ESlateDrawEffect::None : ESlateDrawEffect::DisabledEffect;
+
+		const int32 LinePointsNum = 32;
+
+		TArray<FVector2D> LinePoints;
+		{
+			LinePoints.AddUninitialized(LinePointsNum + 1);
+
+			const float angleRadStep = UE_TWO_PI / LinePointsNum;
+			float angleRad = 0;
+
+			for (size_t i = 0; i < LinePointsNum; i++)
+			{
+				const FVector offset3D(
+					halfLocalSize.X * FMath::Cos(angleRad) * RadiusA,
+					halfLocalSize.Y * FMath::Sin(angleRad) * RadiusB, 0);
+
+				const FVector rotatedOffset3D = FVector(RotationMatrix.TransformPosition(offset3D)) + FVector(halfLocalSize, 0);
+
+				LinePoints[i].X = halfLocalSize.X + (rotatedOffset3D.X - halfLocalSize.X) * (1 + (ProjectionZ - rotatedOffset3D.Z) / (rotatedOffset3D.Z - FocusZ));
+				LinePoints[i].Y = halfLocalSize.Y + (rotatedOffset3D.Y - halfLocalSize.Y) * (1 + (ProjectionZ - rotatedOffset3D.Z) / (rotatedOffset3D.Z - FocusZ));
+
+				angleRad += angleRadStep;
+			}
+
+			LinePoints[LinePointsNum] = LinePoints[0];
+		}
+
+		FSlateDrawElement::MakeLines(
+			OutDrawElements,
+			LayerId++,
+			AllottedGeometry.ToPaintGeometry(),
+			LinePoints,
+			DrawEffects,
+			FLinearColor(1.0f, 1.0f, 1.0f, 0.5f),
+			false
+		);
+	}
+
+	return SPanel::OnPaint(Args, AllottedGeometry, MyCullingRect, OutDrawElements, LayerId, InWidgetStyle, bParentEnabled);
 }
 
 void SCircularPanel3D::CalculateRotationMatrix()
@@ -115,7 +164,10 @@ void SCircularPanel3D::CalculateRotationMatrix()
 
 
 
-UCircularPanel3DSlot::UCircularPanel3DSlot(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), Slot(nullptr) {}
+UCircularPanel3DSlot::UCircularPanel3DSlot(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), Slot(nullptr)
+{
+	Pivot = FVector2D(0.5f);
+}
 
 FVector2D UCircularPanel3DSlot::GetPivot() const
 {
@@ -181,12 +233,15 @@ UCircularPanel3D::UCircularPanel3D(const FObjectInitializer& ObjectInitializer)
 	Alpha = 0; 
 	Betta = 0; 
 	Angle = 0;
-	FocusZ = -16;
-	ProjectionZ = 1.0f;
+	FocusZ = -100000;
+	ProjectionZ = 4000;
+	bDrawDebugEllipse = 1;
 }
 
 void UCircularPanel3D::SetRadiusA(float radiusA)
 {
+	RadiusA = radiusA;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetRadiusA(radiusA);
@@ -195,6 +250,8 @@ void UCircularPanel3D::SetRadiusA(float radiusA)
 
 void UCircularPanel3D::SetRadiusB(float radiusB)
 {
+	RadiusB = radiusB;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetRadiusB(radiusB);
@@ -203,6 +260,8 @@ void UCircularPanel3D::SetRadiusB(float radiusB)
 
 void UCircularPanel3D::SetAlpha(float alpha)
 {
+	Alpha = alpha;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetAlpha(alpha);
@@ -211,6 +270,8 @@ void UCircularPanel3D::SetAlpha(float alpha)
 
 void UCircularPanel3D::SetBetta(float betta)
 {
+	Betta = betta;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetBetta(betta);
@@ -219,6 +280,8 @@ void UCircularPanel3D::SetBetta(float betta)
 
 void UCircularPanel3D::SetAngle(float angle)
 {
+	Angle = angle;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetAngle(angle);
@@ -227,6 +290,8 @@ void UCircularPanel3D::SetAngle(float angle)
 
 void UCircularPanel3D::SetFocusZ(float focusZ)
 {
+	FocusZ = focusZ;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetFocusZ(focusZ);
@@ -235,9 +300,21 @@ void UCircularPanel3D::SetFocusZ(float focusZ)
 
 void UCircularPanel3D::SetProjectionZ(float projectionZ)
 {
+	ProjectionZ = projectionZ;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetProjectionZ(projectionZ);
+	}
+}
+
+void UCircularPanel3D::SetDrawDebugEllipse(bool drawDebugEllipse)
+{
+	bDrawDebugEllipse = drawDebugEllipse;
+
+	if (MyCircularPanel.IsValid())
+	{
+		MyCircularPanel->SetDrawDebugEllipse(drawDebugEllipse);
 	}
 }
 
@@ -254,6 +331,7 @@ void UCircularPanel3D::SynchronizeProperties()
 	MyCircularPanel->SetAngle(Angle);
 	MyCircularPanel->SetFocusZ(FocusZ);
 	MyCircularPanel->SetProjectionZ(ProjectionZ);
+	MyCircularPanel->SetDrawDebugEllipse(bDrawDebugEllipse);
 }
 
 void UCircularPanel3D::ReleaseSlateResources(bool bReleaseChildren)

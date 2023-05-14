@@ -60,7 +60,10 @@ void SCircularPanel::OnArrangeChildren(const FGeometry& AllottedGeometry, FArran
 
 
 
-UCircularPanelSlot::UCircularPanelSlot(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), Slot(nullptr) {}
+UCircularPanelSlot::UCircularPanelSlot(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), Slot(nullptr)
+{
+	Pivot = FVector2D(0.5f);
+}
 
 FVector2D UCircularPanelSlot::GetPivot() const
 {
@@ -128,6 +131,8 @@ UCircularPanel::UCircularPanel(const FObjectInitializer& ObjectInitializer)
 
 void UCircularPanel::SetRadiusA(float radiusA)
 {
+	RadiusA = radiusA;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetRadiusA(radiusA);
@@ -136,6 +141,8 @@ void UCircularPanel::SetRadiusA(float radiusA)
 
 void UCircularPanel::SetRadiusB(float radiusB)
 {
+	RadiusB = radiusB;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetRadiusB(radiusB);
@@ -144,6 +151,8 @@ void UCircularPanel::SetRadiusB(float radiusB)
 
 void UCircularPanel::SetAngle(float angle)
 {
+	Angle = angle;
+
 	if (MyCircularPanel.IsValid())
 	{
 		MyCircularPanel->SetAngle(angle);
