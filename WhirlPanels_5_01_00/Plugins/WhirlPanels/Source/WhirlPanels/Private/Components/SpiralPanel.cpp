@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Components/SpiralPanel.h"
+#include "Layout/ArrangedChildren.h"
 
 #define LOCTEXT_NAMESPACE "WHIRLPANELS_SpiralPanel"
 
@@ -16,7 +17,7 @@ void SSpiralPanel::Construct(const FArguments& InArgs)
 
 void SSpiralPanel::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrangedChildren& ArrangedChildren) const
 {
-	const FVector2D halfLocalSize = 0.5 * AllottedGeometry.GetLocalSize();
+	const FVector2D halfLocalSize = 0.5f * AllottedGeometry.GetLocalSize();
 
 	float radius = Radius;
 	const float radiusStep = RadiusStep;

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Components/CircularPanel.h"
+#include "Layout/ArrangedChildren.h"
 
 #define LOCTEXT_NAMESPACE "WHIRLPANELS_CircularPanel"
 
@@ -15,7 +16,7 @@ void SCircularPanel::Construct(const FArguments& InArgs)
 
 void SCircularPanel::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrangedChildren& ArrangedChildren) const
 {
-	const FVector2D halfLocalSize = 0.5 * AllottedGeometry.GetLocalSize();
+	const FVector2D halfLocalSize = 0.5f * AllottedGeometry.GetLocalSize();
 
 	const int32 NumItems = Slots.Num();
 	

@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Components/CircularPanel3D.h"
+#include "Layout/ArrangedChildren.h"
 
 #define LOCTEXT_NAMESPACE "WHIRLPANELS_CircularPanel3D"
 
@@ -20,7 +21,7 @@ void SCircularPanel3D::Construct(const FArguments& InArgs)
 
 void SCircularPanel3D::OnArrangeChildren(const FGeometry& AllottedGeometry, FArrangedChildren& ArrangedChildren) const
 {
-	const FVector2D halfLocalSize = 0.5 * AllottedGeometry.GetLocalSize();
+	const FVector2D halfLocalSize = 0.5f * AllottedGeometry.GetLocalSize();
 
 	const int32 NumItems = Slots.Num();
 
@@ -91,7 +92,7 @@ int32 SCircularPanel3D::OnPaint(const FPaintArgs& Args, const FGeometry& Allotte
 {
 	if (bDrawDebugEllipse)
 	{
-		const FVector2D halfLocalSize = 0.5 * AllottedGeometry.GetLocalSize();
+		const FVector2D halfLocalSize = 0.5f * AllottedGeometry.GetLocalSize();
 
 		const ESlateDrawEffect DrawEffects = IsEnabled() ? ESlateDrawEffect::None : ESlateDrawEffect::DisabledEffect;
 

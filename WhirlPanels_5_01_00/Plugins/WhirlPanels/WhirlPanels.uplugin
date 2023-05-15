@@ -8,15 +8,19 @@
 	"CreatedBy": "Pentangle Studio",
 	"CreatedByURL": "https://github.com/klauth86",
 	"DocsURL": "",
-	"MarketplaceURL": "",
-	"SupportURL": "",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/15f674b47183480285f763589f76f0a7",
+	"SupportURL": "https://discord.gg/TjxHxkwzRb",
+	"EngineVersion": "5.1.0",
 	"CanContainContent": true,
 	"Installed": false,
 	"Modules": [
 		{
 			"Name": "WhirlPanels",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64"
+			]
 		}
 	]
 }
