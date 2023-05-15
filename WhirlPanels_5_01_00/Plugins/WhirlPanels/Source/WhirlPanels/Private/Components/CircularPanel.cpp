@@ -62,7 +62,11 @@ void SCircularPanel::OnArrangeChildren(const FGeometry& AllottedGeometry, FArran
 
 UCircularPanelSlot::UCircularPanelSlot(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), Slot(nullptr)
 {
+	PRAGMA_DISABLE_DEPRECATION_WARNINGS
+
 	Pivot = FVector2D(0.5f);
+
+	PRAGMA_ENABLE_DEPRECATION_WARNINGS
 }
 
 FVector2D UCircularPanelSlot::GetPivot() const

@@ -8,9 +8,9 @@
 #include "Layout/Children.h"
 #include "Components/PanelSlot.h"
 #include "Components/PanelWidget.h"
-#include "CircularPanel3D.generated.h"
+#include "SpiralPanel.generated.h"
 
-class SCircularPanel3D : public SPanel
+class SSpiralPanel : public SPanel
 {
 public:
 
@@ -23,7 +23,7 @@ public:
 
 			SLATE_ATTRIBUTE(FVector2D, Pivot)
 
-		SLATE_SLOT_END_ARGS()
+			SLATE_SLOT_END_ARGS()
 
 			FSlot()
 			: TSlotBase<FSlot>()
@@ -48,56 +48,36 @@ public:
 		FVector2D Pivot;
 	};
 
-	SLATE_BEGIN_ARGS(SCircularPanel3D)
-		: _RadiusA(0)
-		, _RadiusB(0)
-		, _Alpha(0)
-		, _Betta(0)
+	SLATE_BEGIN_ARGS(SSpiralPanel)
+		: _Radius(0)
+		, _RadiusStep(0)
 		, _Angle(0)
-		, _FocusZ(-16)
-		, _ProjectionZ(1.0f)
-		, _bDrawDebugEllipse(1)
+		, _AngleStep(0)
 	{
 		_Visibility = EVisibility::SelfHitTestInvisible;
 	}
 
 	SLATE_SLOT_ARGUMENT(FSlot, Slots)
 
-		SLATE_ATTRIBUTE(float, RadiusA)
+		SLATE_ATTRIBUTE(float, Radius)
 
-		SLATE_ATTRIBUTE(float, RadiusB)
-		
-		SLATE_ATTRIBUTE(float, Alpha)
-		
-		SLATE_ATTRIBUTE(float, Betta)
-		
+		SLATE_ATTRIBUTE(float, RadiusStep)
+
 		SLATE_ATTRIBUTE(float, Angle)
-		
-		SLATE_ATTRIBUTE(float, FocusZ)
-		
-		SLATE_ATTRIBUTE(float, ProjectionZ)
 
-		SLATE_ATTRIBUTE(bool, bDrawDebugEllipse)
+		SLATE_ATTRIBUTE(float, AngleStep)
 
 	SLATE_END_ARGS()
 
-	void SetRadiusA(const TAttribute<float>& radiusA) { RadiusA = radiusA.Get(0); }
+	void SetRadius(const TAttribute<float>& radius) { Radius = radius.Get(0); }
 
-	void SetRadiusB(const TAttribute<float>& radiusB) { RadiusB = radiusB.Get(0); }
-	
-	void SetAlpha(const TAttribute<float>& alpha) { Alpha = alpha.Get(0); CalculateRotationMatrix(); }
-	
-	void SetBetta(const TAttribute<float>& betta) { Betta = betta.Get(0); CalculateRotationMatrix(); }
+	void SetRadiusStep(const TAttribute<float>& radiusStep) { RadiusStep = radiusStep.Get(0); }
 
 	void SetAngle(const TAttribute<float>& angle) { Angle = angle.Get(0); }
-	
-	void SetFocusZ(const TAttribute<float>& focusZ) { FocusZ = focusZ.Get(0); }
-	
-	void SetProjectionZ(const TAttribute<float>& projectionZ) { ProjectionZ = projectionZ.Get(1.0f); }
 
-	void SetDrawDebugEllipse(const TAttribute<bool>& drawDebugEllipse) { bDrawDebugEllipse = drawDebugEllipse.Get(0); }
+	void SetAngleStep(const TAttribute<float>& angleStep) { AngleStep = angleStep.Get(0); }
 
-	SCircularPanel3D() : Slots(this) {}
+	SSpiralPanel() : Slots(this) {}
 
 	void Construct(const FArguments& InArgs);
 
@@ -111,35 +91,24 @@ public:
 	virtual FVector2D ComputeDesiredSize(float) const override { return FVector2D::ZeroVector; }
 	virtual FChildren* GetChildren() override { return &Slots; }
 
-	virtual int32 OnPaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId, const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override;
-
-	void CalculateRotationMatrix();
-
 protected:
 
 	TPanelChildren<FSlot> Slots;
 
-	float RadiusA;
-	float RadiusB;
-	float Alpha;
-	float Betta;
-	float Angle; 
-	float FocusZ;
-	float ProjectionZ;
-	bool bDrawDebugEllipse;
-
-	FMatrix RotationMatrix;
-	FMatrix ProjectionMatrix;
+	float Radius;
+	float RadiusStep;
+	float Angle;
+	float AngleStep;
 };
 
 UCLASS()
-class WHIRLPANELS_API UCircularPanel3DSlot : public UPanelSlot
+class WHIRLPANELS_API USpiralPanelSlot : public UPanelSlot
 {
 	GENERATED_UCLASS_BODY()
 
 private:
 
-	SCircularPanel3D::FSlot* Slot;
+	SSpiralPanel::FSlot* Slot;
 
 public:
 
@@ -156,44 +125,32 @@ public:
 
 	virtual void SynchronizeProperties() override;
 
-	virtual void BuildSlot(TSharedRef<SCircularPanel3D> InCircularPanel);
+	virtual void BuildSlot(TSharedRef<SSpiralPanel> InSpiralPanel);
 
 	virtual void ReleaseSlateResources(bool bReleaseChildren) override;
 };
 
 UCLASS()
-class WHIRLPANELS_API UCircularPanel3D : public UPanelWidget
+class WHIRLPANELS_API USpiralPanel : public UPanelWidget
 {
 	GENERATED_UCLASS_BODY()
 
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetRadiusA(float radiusA);
+		void SetRadius(float radius);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetRadiusB(float radiusB);
-
-	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetAlpha(float alpha);
-
-	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetBetta(float betta);
+		void SetRadiusStep(float radiusStep);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
 		void SetAngle(float angle);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetFocusZ(float focusZ);
+		void SetAngleStep(float angleStep);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetProjectionZ(float projectionZ);
-
-	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetDrawDebugEllipse(bool drawDebugEllipse);
-
-	UFUNCTION(BlueprintCallable, Category = "Widget")
-		UCircularPanel3DSlot* AddChildToCircularPanel3D(UWidget* Content);
+		USpiralPanelSlot* AddChildToSpiralPanel(UWidget* Content);
 
 	virtual void SynchronizeProperties() override;
 
@@ -217,31 +174,19 @@ protected:
 
 protected:
 
-	TSharedPtr<SCircularPanel3D> MyCircularPanel;
+	TSharedPtr<SSpiralPanel> MySpiralPanel;
 
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel", meta = (UIMin = 0, UIMax = 8, ClampMin = 0, ClampMax = 8))
-		float RadiusA;
+		float Radius;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel", meta = (UIMin = 0, UIMax = 8, ClampMin = 0, ClampMax = 8))
-		float RadiusB;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
-		float Alpha;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
-		float Betta;
+		float RadiusStep;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
 		float Angle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
-		float FocusZ;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
-		float ProjectionZ;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Circular Panel")
-		uint8 bDrawDebugEllipse : 1;
+		float AngleStep;
 };
