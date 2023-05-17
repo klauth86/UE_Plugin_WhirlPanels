@@ -1,11 +1,11 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.1",
+	"EngineAssociation": "5.0",
 	"Category": "",
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "WhirlPanels_5_01_00",
+			"Name": "WhirlPanels_5_00_03",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

@@ -1,10 +1,10 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
 
-public class WhirlPanels_5_01_00 : ModuleRules
+public class WhirlPanels_5_00_03 : ModuleRules
 {
-	public WhirlPanels_5_01_00(ReadOnlyTargetRules Target) : base(Target)
+	public WhirlPanels_5_00_03(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
