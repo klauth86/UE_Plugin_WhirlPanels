@@ -1,1 +1,1 @@
-"D:\UE_5.2\Engine\Build\BatchFiles\RunUAT.bat" BuildPlugin -Plugin="D:\UE_Projects\UE_Plugin_WhirlPanels\WhirlPanels_5_01_00\Plugins\WhirlPanels\WhirlPanels.uplugin" -Package="D:\UE_Projects\UE_Plugin_WhirlPanels\WhirlPanels_5_01_00\Packaging\Tmp" -Rocket -VS2022
+"D:\UE_5.1\Engine\Build\BatchFiles\RunUAT.bat" BuildPlugin -Plugin="D:\UE_Projects\UE_Plugin_WhirlPanels\WhirlPanels_5_01_00\Plugins\WhirlPanels\WhirlPanels.uplugin" -Package="D:\UE_Projects\UE_Plugin_WhirlPanels\WhirlPanels_5_01_00\Packaging\Tmp" -Rocket -VS2022
