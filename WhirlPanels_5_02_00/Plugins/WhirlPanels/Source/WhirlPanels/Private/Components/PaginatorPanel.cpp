@@ -245,8 +245,6 @@ void UPaginatorPanelWidget::ReleaseSlateResources(bool bReleaseChildren)
 
 UPaginatorPanelSlot* UPaginatorPanelWidget::AddChildToPaginatorPanel(UWidget* Content) { return Cast<UPaginatorPanelSlot>(Super::AddChild(Content)); }
 
-UPaginatorPanelSlot* UPaginatorPanelWidget::AddChildToPaginatorPanelAt(UWidget* Content, int32 index) { return Cast<UPaginatorPanelSlot>(Super::InsertChildAt(index, Content)); }
-
 UClass* UPaginatorPanelWidget::GetSlotClass() const { return UPaginatorPanelSlot::StaticClass(); }
 
 void UPaginatorPanelWidget::OnSlotAdded(UPanelSlot* InSlot)

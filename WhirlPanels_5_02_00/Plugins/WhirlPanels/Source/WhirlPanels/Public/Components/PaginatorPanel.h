@@ -184,9 +184,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Widget")
 		UPaginatorPanelSlot* AddChildToPaginatorPanel(UWidget* Content);
 
-	UFUNCTION(BlueprintCallable, Category = "Widget")
-		UPaginatorPanelSlot* AddChildToPaginatorPanelAt(UWidget* Content, int32 index);
-
 #if WITH_EDITOR
 	virtual const FText GetPaletteCategory() override;
 #endif
