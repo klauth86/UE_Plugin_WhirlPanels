@@ -33,7 +33,7 @@ public:
 
 	SLATE_BEGIN_ARGS(SPaginatorPanel)
 		: _StartIndex(0)
-		, _Count(5)
+		, _ItemCount(5)
 		, _ItemSize(FIntPoint(128, 128))
 		, _Direction(FVector2D(1, 0))
 		, _TargetIndex(0)
@@ -46,7 +46,7 @@ public:
 
 		SLATE_ATTRIBUTE(int32, StartIndex)
 
-		SLATE_ATTRIBUTE(int32, Count)
+		SLATE_ATTRIBUTE(int32, ItemCount)
 
 		SLATE_ATTRIBUTE(FIntPoint, ItemSize)
 
@@ -60,7 +60,7 @@ public:
 
 		void SetStartIndex(const TAttribute<int32>& startIndex) { StartIndex = startIndex.Get(0); }
 
-	void SetCount(const TAttribute<int32>& count) { Count = count.Get(0); }
+	void SetItemCount(const TAttribute<int32>& itemCount) { ItemCount = itemCount.Get(0); }
 
 	void SetItemSize(const TAttribute<FIntPoint>& itemSize) { ItemSize = itemSize.Get(FIntPoint(128, 128)); }
 
@@ -74,7 +74,7 @@ public:
 
 	float RecalcTarget(const TAttribute<int32>& deltaTargetIndex);
 
-	SPaginatorPanel() : Slots(this), StartIndex(0), Count(5), ItemSize(FIntPoint(128, 128)), Direction(FVector2D(1, 0)), TargetIndex(0), TargetAlpha(0.f) {}
+	SPaginatorPanel() : Slots(this), StartIndex(0), ItemCount(5), ItemSize(FIntPoint(128, 128)), Direction(FVector2D(1, 0)), TargetIndex(0), TargetAlpha(0.f) {}
 
 	void Construct(const FArguments& InArgs);
 
@@ -85,14 +85,14 @@ public:
 	int32 RemoveSlot(const TSharedRef<SWidget>& SlotWidget) { return Slots.Remove(SlotWidget); }
 
 	virtual void OnArrangeChildren(const FGeometry& AllottedGeometry, FArrangedChildren& ArrangedChildren) const override;
-	virtual FVector2D ComputeDesiredSize(float) const override { return Count > 0 ? FVector2D(Direction.X * (Count - 1) + 1, Direction.Y * (Count - 1) + 1) * ItemSize : FVector2D::ZeroVector; }
+	virtual FVector2D ComputeDesiredSize(float) const override { return ItemCount > 0 ? FVector2D(Direction.X * (ItemCount - 1) + 1, Direction.Y * (ItemCount - 1) + 1) * ItemSize : FVector2D::ZeroVector; }
 	virtual FChildren* GetChildren() override { return &Slots; }
 
 protected:
 
 	TPanelChildren<FSlot> Slots;
 	int32 StartIndex;
-	int32 Count;
+	int32 ItemCount;
 	FIntPoint ItemSize;
 	FVector2D Direction;
 	int32 TargetIndex;
@@ -160,7 +160,7 @@ public:
 		void SetStartIndex(int32 startIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
-		void SetCount(int32 count);
+		void SetItemCount(int32 itemCount);
 
 	UFUNCTION(BlueprintCallable, Category = "Widget")
 		void SetItemSize(const FIntPoint& itemSize);
@@ -214,7 +214,7 @@ public:
 		int32 StartIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Paginator Panel", meta = (UIMin = "0", ClampMin = "0"))
-		int32 Count;
+		int32 ItemCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Paginator Panel", meta = (UIMin = "0", ClampMin = "0"))
 		FIntPoint ItemSize;

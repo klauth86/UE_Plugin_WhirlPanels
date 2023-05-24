@@ -30,7 +30,7 @@ void SPaginatorPanel::Construct(const FArguments& InArgs)
 {
 	Slots.AddSlots(MoveTemp(const_cast<TArray<FSlot::FSlotArguments>&>(InArgs._Slots)));
 	SetStartIndex(InArgs._StartIndex);
-	SetCount(InArgs._Count);
+	SetItemCount(InArgs._ItemCount);
 	SetItemSize(InArgs._ItemSize);
 	SetDirection(InArgs._Direction);
 	SetTargetIndex(InArgs._TargetIndex);
@@ -42,7 +42,7 @@ void SPaginatorPanel::OnArrangeChildren(const FGeometry& AllottedGeometry, FArra
 	const float deltaIndex = (TargetIndex - StartIndex) * TargetAlpha;
 	const float mixedIndex = StartIndex + deltaIndex;
 	const int startIndex = FMath::FloorToInt32(mixedIndex);
-	const int endIndex = FMath::CeilToInt32(mixedIndex) + Count;
+	const int endIndex = FMath::CeilToInt32(mixedIndex) + ItemCount;
 
 	const FVector2D directionStep = Direction * ItemSize;
 
@@ -190,7 +190,7 @@ UPaginatorPanelWidget::UPaginatorPanelWidget(const FObjectInitializer& ObjectIni
 	SetVisibilityInternal(ESlateVisibility::SelfHitTestInvisible);
 
 	StartIndex = 0;
-	Count = 5;
+	ItemCount = 5;
 	ItemSize = FIntPoint(128, 128);
 	Direction = FVector2D(1, 0);
 	TargetIndex = 0;
@@ -199,7 +199,7 @@ UPaginatorPanelWidget::UPaginatorPanelWidget(const FObjectInitializer& ObjectIni
 
 void UPaginatorPanelWidget::SetStartIndex(int32 startIndex) { if (MyPaginatorPanel.IsValid()) MyPaginatorPanel->SetStartIndex(StartIndex = startIndex); }
 
-void UPaginatorPanelWidget::SetCount(int32 count) { if (MyPaginatorPanel.IsValid()) MyPaginatorPanel->SetCount(Count = count); }
+void UPaginatorPanelWidget::SetItemCount(int32 itemCount) { if (MyPaginatorPanel.IsValid()) MyPaginatorPanel->SetItemCount(ItemCount = itemCount); }
 
 void UPaginatorPanelWidget::SetItemSize(const FIntPoint& itemSize) { if (MyPaginatorPanel.IsValid()) MyPaginatorPanel->SetItemSize(ItemSize = itemSize); }
 
@@ -224,7 +224,7 @@ void UPaginatorPanelWidget::SynchronizeProperties()
 	{
 		MyPaginatorPanel->SetStartIndex(StartIndex);
 
-		MyPaginatorPanel->SetCount(Count);
+		MyPaginatorPanel->SetItemCount(ItemCount);
 
 		MyPaginatorPanel->SetItemSize(ItemSize);
 
@@ -275,7 +275,7 @@ TSharedRef<SWidget> UPaginatorPanelWidget::RebuildWidget()
 {
 	MyPaginatorPanel = SNew(SPaginatorPanel)
 		.StartIndex(StartIndex)
-		.Count(Count)
+		.ItemCount(ItemCount)
 		.ItemSize(ItemSize)
 		.Direction(Direction)
 		.TargetIndex(TargetIndex)
