@@ -25,7 +25,7 @@ public class WhirlPanels : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-                "Core", "CoreUObject", "UMG", "SlateCore"
+                "Core", "CoreUObject", "UMG", "SlateCore", "Engine"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
