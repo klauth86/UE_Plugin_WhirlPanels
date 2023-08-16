@@ -7,6 +7,7 @@
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Styling/SlateBrush.h"
 #include "Engine/StreamableManager.h"
+#include "Styling/CoreStyle.h"
 #include "TiledImage1D.generated.h"
 
 class USlateBrushAsset;

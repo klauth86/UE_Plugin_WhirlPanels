@@ -14,7 +14,7 @@
 
 #define LOCTEXT_NAMESPACE "WHIRLPANELS_STiledImage1D"
 
-SLATE_IMPLEMENT_WIDGET(SImage)
+SLATE_IMPLEMENT_WIDGET(STiledImage1D)
 void STiledImage1D::PrivateRegisterAttributes(FSlateAttributeInitializer& AttributeInitializer)
 {
 	SLATE_ADD_MEMBER_ATTRIBUTE_DEFINITION_WITH_NAME(AttributeInitializer, "Image", ImageAttribute, EInvalidateWidgetReason::Layout);
