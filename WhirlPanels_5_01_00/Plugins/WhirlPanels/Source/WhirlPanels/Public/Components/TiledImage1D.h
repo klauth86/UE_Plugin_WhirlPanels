@@ -129,10 +129,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Appearance")
 		UMaterialInstanceDynamic* GetDynamicMaterial();
 
-	UFUNCTION(BlueprintCallable, Category = "Widget")
+	UFUNCTION(BlueprintCallable, Category = "Tiled Image 1D")
 		void SetInverseOrder(bool inverseOrder);
 
-	UFUNCTION(BlueprintCallable, Category = "Widget")
+	UFUNCTION(BlueprintCallable, Category = "Tiled Image 1D")
 		void SetDirection(const FVector2D& direction);
 
 	virtual void SynchronizeProperties() override;
@@ -163,22 +163,22 @@ protected:
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Appearance)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Appearance")
 		FSlateBrush Brush;
 
 	UPROPERTY()
 		FGetSlateBrush BrushDelegate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Appearance, meta = (sRGB = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Appearance", meta = (sRGB = "true"))
 		FLinearColor ColorAndOpacity;
 
 	UPROPERTY()
 		FGetLinearColor ColorAndOpacityDelegate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Paginator Panel", meta = (UIMin = "0", ClampMin = "0"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tiled Image 1D", meta = (UIMin = "0", ClampMin = "0"))
 		bool InverseOrder;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Paginator Panel", meta = (UIMin = "0", UIMax = "1", ClampMin = "0", ClampMax = "1"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tiled Image 1D", meta = (UIMin = "0", UIMax = "1", ClampMin = "0", ClampMax = "1"))
 		FVector2D Direction;
 
 protected:
