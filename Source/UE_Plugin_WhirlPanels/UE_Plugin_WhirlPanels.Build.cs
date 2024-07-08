@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class WhirlPanels_5_03_00 : ModuleRules
+public class UE_Plugin_WhirlPanels : ModuleRules
 {
-	public WhirlPanels_5_03_00(ReadOnlyTargetRules Target) : base(Target)
+	public UE_Plugin_WhirlPanels(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	

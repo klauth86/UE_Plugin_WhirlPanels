@@ -3,13 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class WhirlPanels_5_03_00EditorTarget : TargetRules
+public class UE_Plugin_WhirlPanelsEditorTarget : TargetRules
 {
-	public WhirlPanels_5_03_00EditorTarget(TargetInfo Target) : base(Target)
+	public UE_Plugin_WhirlPanelsEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 
-		ExtraModuleNames.AddRange( new string[] { "WhirlPanels_5_03_00" } );
+		ExtraModuleNames.AddRange( new string[] { "UE_Plugin_WhirlPanels" } );
 	}
 }
