@@ -10,7 +10,7 @@
 	"DocsURL": "",
 	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/15f674b47183480285f763589f76f0a7",
 	"SupportURL": "https://discord.gg/TjxHxkwzRb",
-	"EngineVersion": "5.3.0",
+	"EngineVersion": "5.4.0",
 	"CanContainContent": true,
 	"Installed": false,
 	"Modules": [
