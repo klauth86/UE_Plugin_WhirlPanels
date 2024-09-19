@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 4,
-	"VersionName": "1.4",
+	"VersionName": "1.5",
 	"FriendlyName": "WhirlPanels",
 	"Description": "Whirl Panels",
 	"Category": "UI",
@@ -18,9 +18,7 @@
 			"Name": "WhirlPanels",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
-			"PlatformAllowList": [
-				"Win64"
-			]
+			"PlatformAllowList": [ "Win64", "Mac", "Linux" ]
 		}
 	]
 }

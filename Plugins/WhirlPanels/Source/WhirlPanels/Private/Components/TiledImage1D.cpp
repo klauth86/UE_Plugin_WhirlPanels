@@ -1,7 +1,5 @@
 // Copyright 2023 Pentangle Studio Licensed under the Unlicense License (the LICENSE);
 
-#pragma once
-
 #include "Components/TiledImage1D.h"
 #include "Slate/SlateBrushAsset.h"
 #include "Engine/Texture2D.h"

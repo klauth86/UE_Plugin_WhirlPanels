@@ -1,7 +1,5 @@
 // Copyright 2023 Pentangle Studio Licensed under the Unlicense License (the LICENSE);
 
-#pragma once
-
 #include "Components/PaginatorPanel.h"
 #include "Layout/ArrangedChildren.h"
 #include "Layout/LayoutUtils.h"
